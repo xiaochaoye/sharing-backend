@@ -12,6 +12,7 @@ spring:
     host: 47.120.46.29
     database: 0
     password: yjq@wc123456
+
   # session 失效时间
   session:
     timeout: 86400
