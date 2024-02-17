@@ -3,6 +3,7 @@ package com.chao.share.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chao.share.common.ErrorCode;
+import com.chao.share.common.UserConstant;
 import com.chao.share.exception.BusinessException;
 import com.chao.share.model.domain.User;
 import com.chao.share.mapper.UserMapper;
@@ -20,9 +21,9 @@ import java.util.regex.Pattern;
 import static com.chao.share.common.UserConstant.USER_LOGIN_STATE;
 
 /**
-* @author wangchao
+* @author 超
 * @description 针对表【user(用户)】的数据库操作Service实现
-* @createDate 2024-02-05 11:04:01
+*
 */
 @Service
 @Slf4j
@@ -120,8 +121,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      * 用户脱敏 返回一些非敏感信息给调用方。
      * 这样可以确保在需要返回用户信息给外部或其他模块时，不会暴露过多的敏感信息，从而增加系统的安全性。
      *
-     * @param originUser
-     * @return
      */
     @Override
     public User getSafetyUser(User originUser) {
@@ -147,7 +146,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     /**
      * 用户注销
      *
-     * @param request
      */
     @Override
     public int userLogout(HttpServletRequest request) {
@@ -155,6 +153,60 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         request.getSession().removeAttribute(USER_LOGIN_STATE);
         return 1;
     }
+
+    /**
+     * 是否为管理员(查询时用)
+     *
+     */
+    @Override
+    public boolean isAdminSearch(HttpServletRequest request) {
+        // 仅管理员可查询
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        User user = (User) userObj;
+        return user != null && user.getUserRole() == UserConstant.ADMIN_ROLE;
+    }
+
+    /**
+     * 是否为管理员（登录时检查）
+     *
+     */
+    @Override
+    public boolean isAdminLogin(User loginUser) {
+        return loginUser != null && loginUser.getUserRole() == UserConstant.ADMIN_ROLE;
+    }
+
+    @Override
+    public User getLoginUser(HttpServletRequest request) {
+        if (request == null) {
+            return null;
+        }
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        if (userObj == null) {
+            throw new BusinessException(ErrorCode.NO_AUTH);
+        }
+        return (User) userObj;
+    }
+
+    @Override
+    public int updateUser(User user, User loginUser) {
+        Long userId = user.getId();
+        if (userId <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // todo 补充校验，如果用户没有传任何要更新的值，就直接报错，不用执行 update 语句
+        // 如果是管理员，允许更新任意用户
+        // 如果不是管理员，只允许更新当前（自己的）信息
+        if (!isAdminLogin(loginUser) && !userId.equals(loginUser.getId())) {
+            throw new BusinessException(ErrorCode.NO_AUTH);
+        }
+        User oldUser = userMapper.selectById(userId);
+        if (oldUser == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        return userMapper.updateById(user);
+    }
+
+
 }
 
 

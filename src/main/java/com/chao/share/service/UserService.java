@@ -20,7 +20,16 @@ public interface UserService extends IService<User> {
 
     User getSafetyUser(User user);
 
-    boolean isAdmin(HttpServletRequest request);
+
+    /**
+     * 是否为管理员(查询时用)
+     */
+    boolean isAdminSearch(HttpServletRequest request);
+
+    /**
+     * 是否为管理员（）
+     */
+    boolean isAdminLogin(User loginUser);
 
     User getLoginUser(HttpServletRequest request);
 
