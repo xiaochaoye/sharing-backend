@@ -14,8 +14,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@ConfigurationProperties(prefix = "spring.data.mongodb")
 @Data
+@ConfigurationProperties(prefix = "spring.data.mongodb")
 @Configuration
 public class MongoConfig {
 
@@ -41,17 +41,14 @@ public class MongoConfig {
     public MongoClientSettings mongoClientSettings() {
         MongoCredential mongoCredential = MongoCredential.createCredential(mongoUser, dataBaseName, mongoPassword.toCharArray());
         return MongoClientSettings.builder()
-                .applyConnectionString(new ConnectionString(mongoUri))
+                .applyConnectionString(new ConnectionString("mongodb://" + mongoHost + ":" + mongoPort))
                 .credential(mongoCredential)
                 .build();
     }
 
     @Bean
-    public MongoClient mongoClient() {
-        MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(new ConnectionString(mongoUri))
-                .build();
-        return MongoClients.create(settings);
+    public MongoClient mongoClient(MongoClientSettings mongoClientSettings) {
+        return MongoClients.create(mongoClientSettings);
     }
 
     @Bean
