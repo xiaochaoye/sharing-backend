@@ -11,6 +11,7 @@ import com.chao.share.model.request.UserRegisterRequest;
 import com.chao.share.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -119,5 +120,16 @@ public class UserController {
         }
         boolean b = userService.removeById(id);
         return ResultUtils.success(b);
+    }
+
+    @PostMapping("/upload")
+    public BaseResponse<String> uploadAvatar(@RequestParam("image") MultipartFile file, HttpServletRequest request) {
+        if (file == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件不能为空");
+        }
+//        User loginUser = userService.getLoginUser(request);
+//        String avatarUrl = userService.uploadAvatar(file, loginUser);
+        String avatarUrl = userService.uploadAvatar(file);
+        return ResultUtils.success(avatarUrl);
     }
 }

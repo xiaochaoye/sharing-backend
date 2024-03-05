@@ -2,6 +2,7 @@ package com.chao.share.service;
 
 import com.chao.share.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -34,4 +35,8 @@ public interface UserService extends IService<User> {
     User getLoginUser(HttpServletRequest request);
 
     int updateUser(User user, User loginUser);
+
+//    String uploadAvatar(MultipartFile file, User loginUser);
+
+    String uploadAvatar(MultipartFile file);
 }

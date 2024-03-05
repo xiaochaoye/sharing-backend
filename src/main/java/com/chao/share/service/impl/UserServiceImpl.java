@@ -10,11 +10,16 @@ import com.chao.share.mapper.UserMapper;
 import com.chao.share.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +37,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private GridFsTemplate gridFsTemplate;
 
     /**
      * 盐值，混淆密码
@@ -182,7 +190,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         if (userObj == null) {
-            throw new BusinessException(ErrorCode.NO_AUTH);
+            throw new BusinessException(ErrorCode.NO_AUTH, "用户未登录");
         }
         return (User) userObj;
     }
@@ -206,6 +214,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userMapper.updateById(user);
     }
 
+//    @Override
+//    public String uploadAvatar(MultipartFile file, User loginUser) {
+//        return null;
+//    }
+
+    @Override
+    public String uploadAvatar(MultipartFile file) {
+        if (file == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件不能为空");
+        }
+        // 文件类型校验,后端
+        if (!file.getContentType().startsWith("image")) {
+            throw new BusinessException(ErrorCode.FILE_ERROR, "文件格式不是图片");
+        }
+        // 文件大小校验
+        if (file.getSize() / 1024 / 1024 > 2) {
+            throw new BusinessException(ErrorCode.FILE_ERROR, "文件大小超过2MB");
+        }
+        // 文件上传到MongoDB的Gridfs存储桶并返回链接
+        try {
+            ObjectId objectId = gridFsTemplate.store(file.getInputStream(), file.getOriginalFilename(), file.getContentType());
+            return "http://localhost:8080/files/" + objectId;
+        } catch (IOException e) {
+            throw new BusinessException(ErrorCode.FILE_ERROR, "文件上传失败");
+        }
+    }
 
 }
 

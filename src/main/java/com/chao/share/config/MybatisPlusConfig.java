@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * @author 超
  */
 @Configuration
-@MapperScan("创建数据表后再改")
+@MapperScan("com.chao.share.mapper")
 public class MybatisPlusConfig {
     /**
      * 新的分页插件,一缓和二缓遵循mybatis的规则,需要设置 MybatisConfiguration#useDeprecatedExecutor = false 避免缓存出现问题(该属性会在旧插件移除后一同移除)
