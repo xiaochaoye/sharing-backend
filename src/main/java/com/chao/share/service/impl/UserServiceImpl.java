@@ -5,13 +5,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chao.share.common.ErrorCode;
 import com.chao.share.common.UserConstant;
 import com.chao.share.exception.BusinessException;
-import com.chao.share.model.domain.User;
 import com.chao.share.mapper.UserMapper;
+import com.chao.share.model.domain.UploadFile;
+import com.chao.share.model.domain.User;
 import com.chao.share.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.types.Binary;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -20,14 +22,15 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.chao.share.common.UserConstant.USER_LOGIN_STATE;
 
 /**
-* @author 超
-* @description 针对表【user(用户)】的数据库操作Service实现
+*   @author 超
+*   @description 针对表【user(用户)】的数据库操作Service实现
 *
 */
 @Service
@@ -41,6 +44,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Resource
     private GridFsTemplate gridFsTemplate;
 
+    @Resource
+    private MongoTemplate mongoTemplate;
     /**
      * 盐值，混淆密码
      */
@@ -212,33 +217,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         return userMapper.updateById(user);
-    }
-
-//    @Override
-//    public String uploadAvatar(MultipartFile file, User loginUser) {
-//        return null;
-//    }
-
-    @Override
-    public String uploadAvatar(MultipartFile file) {
-        if (file == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件不能为空");
-        }
-        // 文件类型校验,后端
-        if (!file.getContentType().startsWith("image")) {
-            throw new BusinessException(ErrorCode.FILE_ERROR, "文件格式不是图片");
-        }
-        // 文件大小校验
-        if (file.getSize() / 1024 / 1024 > 2) {
-            throw new BusinessException(ErrorCode.FILE_ERROR, "文件大小超过2MB");
-        }
-        // 文件上传到MongoDB的Gridfs存储桶并返回链接
-        try {
-            ObjectId objectId = gridFsTemplate.store(file.getInputStream(), file.getOriginalFilename(), file.getContentType());
-            return "http://localhost:8080/files/" + objectId;
-        } catch (IOException e) {
-            throw new BusinessException(ErrorCode.FILE_ERROR, "文件上传失败");
-        }
     }
 
 }

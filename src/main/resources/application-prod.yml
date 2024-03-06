@@ -12,7 +12,16 @@ spring:
     host: 47.120.46.29
     database: 0
     password: yjq@wc123456
-
+  data:
+    mongodb:
+      username: mymongo
+      password: 123456
+      database: sharing
+      # db.createUser({user:"mymongo",pwd:"123456",roles:["readWrite"]}) 新建一个这样的用户，才能正常认证
+      gridfs:
+        bucket: sharing
+      host: 47.120.46.29
+      port: 27017
   # session 失效时间
   session:
     timeout: 86400

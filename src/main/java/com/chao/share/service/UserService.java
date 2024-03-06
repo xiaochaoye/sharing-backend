@@ -36,7 +36,4 @@ public interface UserService extends IService<User> {
 
     int updateUser(User user, User loginUser);
 
-//    String uploadAvatar(MultipartFile file, User loginUser);
-
-    String uploadAvatar(MultipartFile file);
 }
