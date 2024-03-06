@@ -30,6 +30,7 @@ public class UploadFileController {
     /**
      *  图片上传
      */
+    // todo 部署到服务器时需要更改返回的路径名
     @PostMapping("/uploadImage")
     @ResponseBody
     public BaseResponse<String> uploadImage(@RequestParam(value = "image") MultipartFile file) {
@@ -47,15 +48,14 @@ public class UploadFileController {
                     .setContentType(file.getContentType())
                     .setSize(file.getSize());
             UploadFile saveFile = mongoTemplate.save(uploadFile);
-//            return "http://localhost:8080/file/image" + saveFile.getId();
-            return ResultUtils.success("http://localhost:8080/file/image/" + saveFile.getId());
+            return ResultUtils.success("http://localhost:8080/api/file/image/" + saveFile.getId());
         } catch (IOException e) {
             throw new BusinessException(ErrorCode.FILE_ERROR, "文件上传失败");
         }
     }
 
     /**
-     *  获取图片
+     *  获取图片给文章中回显
      */
     @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     @ResponseBody
@@ -70,4 +70,9 @@ public class UploadFileController {
         headers.setContentType(MediaType.parseMediaType(file.getContentType()));
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
+
+    /**
+     *  获取图片链接当头像，需要登录时才能上传头像
+     */
+
 }

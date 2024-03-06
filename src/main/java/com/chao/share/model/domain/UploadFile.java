@@ -27,7 +27,7 @@ public class UploadFile {
     private LocalDateTime uploadTime;
 
     /**
-     *  文件内容
+     *  文件内容  图片单张最大为16MB
      */
     private Binary content;
 
