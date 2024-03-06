@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @RequestMapping("/file")
 public class UploadFileController {
 
-    private final MongoTemplate mongoTemplate;
+    private MongoTemplate mongoTemplate;
 
     /**
      *  图片上传
@@ -67,8 +67,7 @@ public class UploadFileController {
         }
         // 设置图片的 Content-Type
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG); // 假设这里是 JPEG 类型，根据实际情况修改
-        headers.setContentType(MediaType.IMAGE_PNG);
+        headers.setContentType(MediaType.parseMediaType(file.getContentType()));
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
 }
