@@ -106,7 +106,7 @@ public class UploadFileController {
     }
 
     /**
-     *  获取图片给文章中回显
+     *  获取图片给文章中回显和作为文章封面
      */
     @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     @ResponseBody

@@ -1,7 +1,17 @@
 package com.chao.share.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.chao.share.model.domain.Article;
 
-public interface ArticleService extends IService {
+import java.util.List;
 
+public interface ArticleService  {
+    List<Article> getAllArticles();
+
+    Article createArticle(Article article);
+
+    void deleteArticle(String id);
+
+    Article updateArticle(String id, Article article);
+
+    Article getArticleById(String id);
 }
