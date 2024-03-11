@@ -9,11 +9,12 @@ import org.springframework.data.annotation.Id;
 @Document(collection = "articles")
 public class Article {
 
-
     @Id
     private String id;
 
     private String title;
+
+    private String author;
 
     private String description;
 
@@ -41,6 +42,14 @@ public class Article {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getDescription() {
