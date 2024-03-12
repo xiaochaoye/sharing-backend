@@ -1,80 +1,59 @@
 package com.chao.share.model.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 
 /**
- * @author 超
+ *  @author 超
+ *
+ *  集合 id, 文章标题 title, 文章作者 author, 作者id authorId, 文章描述 description,
+ *  文章封面 cover, 文章内容 content, 点赞按钮是否可用 isDisabled,
+ *  点赞和取消点赞次数 clickCount, 文章点赞次数 likeCount
+ *
  */
 @Document(collection = "articles")
 public class Article {
 
+    @Setter
+    @Getter
     @Id
     private String id;
 
+    @Setter
+    @Getter
     private String title;
 
+    @Setter
+    @Getter
     private String author;
 
+    @Setter
+    @Getter
+    private String authorId;
+
+    @Setter
+    @Getter
     private String description;
 
+    @Setter
+    @Getter
     private String cover;
 
+    @Setter
+    @Getter
     private String content;
 
     private boolean isDisabled;
 
+    @Setter
+    @Getter
     private int clickCount;
 
+    @Setter
+    @Getter
     private int likeCount;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCover() {
-        return cover;
-    }
-
-    public void setCover(String cover) {
-        this.cover = cover;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
     public boolean isDisabled() {
         return isDisabled;
@@ -84,19 +63,4 @@ public class Article {
         isDisabled = disabled;
     }
 
-    public int getClickCount() {
-        return clickCount;
-    }
-
-    public void setClickCount(int clickCount) {
-        this.clickCount = clickCount;
-    }
-
-    public int getLikeCount() {
-        return likeCount;
-    }
-
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
 }

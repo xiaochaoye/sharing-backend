@@ -1,14 +1,21 @@
 package com.chao.share.controller;
 
 import com.chao.share.common.BaseResponse;
+import com.chao.share.common.ErrorCode;
 import com.chao.share.common.ResultUtils;
+import com.chao.share.exception.BusinessException;
 import com.chao.share.model.domain.Article;
+import com.chao.share.model.domain.User;
 import com.chao.share.service.ArticleService;
+import com.chao.share.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+import static com.chao.share.common.UserConstant.USER_LOGIN_STATE;
 
 /**
  *  文章接口   增删改查
@@ -21,6 +28,9 @@ public class ArticleController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Resource
+    private UserService userService;
 
     @GetMapping("/cards")
     @ResponseBody
@@ -35,9 +45,19 @@ public class ArticleController {
         return ResultUtils.success(uploadArticle);
     }
 
-    @DeleteMapping("/delete")
-    public void deleteArticle(@RequestParam("id") String id) {
-        articleService.deleteArticle(id);
+    @GetMapping("/delete")
+    public void deleteArticle(@RequestParam("id") String id, HttpServletRequest request) {
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        User user = (User) userObj;
+        if (user== null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN, "未登录");
+        }
+        Article article = articleService.getArticleById(id);
+        if (article != null) {
+            articleService.deleteArticle(id, user, article);
+        } else {
+            throw new BusinessException(ErrorCode.FILE_ERROR, "文章不存在");
+        }
     }
 
     @PostMapping("/update")
@@ -52,11 +72,25 @@ public class ArticleController {
         return ResultUtils.success(articleById);
     }
 
-    @PostMapping("/like")
+    @GetMapping("/like")
     public BaseResponse<Article> likeArticle(@RequestParam("id") String id) {
         Article likeArticle = articleService.getArticleById(id);
+        System.out.println("文章内容：" + likeArticle);
         if (likeArticle != null) {
+            System.out.println("当前点赞数" + likeArticle.getLikeCount());
             likeArticle.setLikeCount(likeArticle.getLikeCount() + 1);
+            articleService.updateArticle(id, likeArticle);
+        }
+        return ResultUtils.success(likeArticle);
+    }
+
+    @GetMapping("/dislike")
+    public BaseResponse<Article> disLikeArticle(@RequestParam("id") String id) {
+        Article likeArticle = articleService.getArticleById(id);
+        System.out.println("文章内容：" + likeArticle);
+        if (likeArticle != null) {
+            System.out.println("当前点赞数" + likeArticle.getLikeCount());
+            likeArticle.setLikeCount(likeArticle.getLikeCount() - 1);
             articleService.updateArticle(id, likeArticle);
         }
         return ResultUtils.success(likeArticle);
