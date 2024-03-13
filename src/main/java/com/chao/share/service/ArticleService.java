@@ -10,7 +10,7 @@ public interface ArticleService  {
 
     Article createArticle(Article article);
 
-    void deleteArticle(String id, User user, Article authorId);
+    boolean deleteArticle(String id, User user, Article authorId);
 
     Article updateArticle(String id, Article article);
 

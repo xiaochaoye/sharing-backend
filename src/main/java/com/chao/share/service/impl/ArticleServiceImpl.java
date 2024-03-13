@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -32,14 +31,15 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void deleteArticle(String id, User user, Article article) {
+    public boolean deleteArticle(String id, User user, Article article) {
         if (user == null || user.getId() < 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户未登录");
         }
         // 检查用户权限，确保用户有权限删除文章
-        if (user.getId().equals(article.getAuthorId()) || isAdminLogin(user)) {
+        if (user.getId().equals(Long.parseLong(article.getAuthorId())) || isAdminLogin(user)) {
             // 删除文章
             articleRepository.deleteById(id);
+            return true;
         } else {
             throw new BusinessException(ErrorCode.NO_AUTH, "无权限删除文章");
         }

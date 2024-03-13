@@ -19,6 +19,15 @@ public class ResultUtils {
     }
 
     /**
+     * @param description
+     * @return
+     * @param <T>
+     */
+    public static <T> BaseResponse<T> success(String description) {
+        return new BaseResponse<>(0, null, "ok", description);
+    }
+
+    /**
      * 失败
      *
      * @param errorCode

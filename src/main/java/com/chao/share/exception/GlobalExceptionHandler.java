@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * 全局异常处理器
+ * RestControllerAdvice 注解
+ * 用于捕获和处理全局异常，包括自定义异常和系统异常，可以捕获和处理所有控制器（Controller）的异常。
  *
  * @author 超
  */

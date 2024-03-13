@@ -46,7 +46,7 @@ public class ArticleController {
     }
 
     @GetMapping("/delete")
-    public void deleteArticle(@RequestParam("id") String id, HttpServletRequest request) {
+    public BaseResponse<String> deleteArticle(@RequestParam("id") String id, HttpServletRequest request) {
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         User user = (User) userObj;
         if (user== null) {
@@ -55,6 +55,7 @@ public class ArticleController {
         Article article = articleService.getArticleById(id);
         if (article != null) {
             articleService.deleteArticle(id, user, article);
+            return ResultUtils.success("删除成功");
         } else {
             throw new BusinessException(ErrorCode.FILE_ERROR, "文章不存在");
         }
