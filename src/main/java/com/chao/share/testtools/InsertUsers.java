@@ -26,7 +26,7 @@ public class InsertUsers {
      * 批量插入假用户
      */
     //不插入假数据的时候就注释掉下面那句话
-   @Scheduled(initialDelay = 5000, fixedRate = Long.MAX_VALUE)
+//   @Scheduled(initialDelay = 5000, fixedRate = Long.MAX_VALUE)
     public void doInsertUsers() {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();

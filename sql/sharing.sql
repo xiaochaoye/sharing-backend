@@ -25,3 +25,7 @@ CREATE TABLE `user`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户' ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE INDEX idx_username ON `user` (`username`);
+CREATE INDEX idx_phone ON `user` (`phone`);
+CREATE INDEX idx_email ON `user` (`email`);
