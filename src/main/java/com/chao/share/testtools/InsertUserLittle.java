@@ -16,7 +16,7 @@ public class InsertUserLittle{
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            System.out.println("找不到MySQL Connector/J驱动程序");
+            System.out.println("找不到MySQL驱动程序");
             e.printStackTrace();
             return;
         }

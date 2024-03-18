@@ -88,13 +88,19 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public BaseResponse<List<User>> searchUsers(String username, HttpServletRequest request) {
+    public BaseResponse<List<User>> searchUsers(String username, Long id, String gender, HttpServletRequest request) {
         if (userService.isAdminSearch(request)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(username)) {
             queryWrapper.like("username", username);
+        }
+        if (id != null) {
+            queryWrapper.eq("id", id);
+        }
+        if (StringUtils.isNotBlank(gender)) {
+            queryWrapper.eq("gender", gender);
         }
         List<User> userList = userService.list(queryWrapper);
         List<User> list = userList.stream().map(user -> userService.getSafetyUser(user)).collect(Collectors.toList());

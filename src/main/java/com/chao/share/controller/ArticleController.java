@@ -99,25 +99,16 @@ public class ArticleController {
 
     @GetMapping("/favourite")
     public BaseResponse<Article> getFavourite(@RequestParam("id") String id) {
-        Article likeArticle = articleService.getArticleById(id);
-        System.out.println("文章内容：" + likeArticle);
-        if (likeArticle != null) {
-            System.out.println("当前点赞数" + likeArticle.getLikeCount());
-            likeArticle.setLikeCount(likeArticle.getLikeCount() - 1);
-            articleService.updateArticle(id, likeArticle);
-        }
-        return ResultUtils.success(likeArticle);
+        return null;
     }
 
     @GetMapping("/search")
     public BaseResponse<Article> getSearch(@RequestParam("id") String id) {
-        Article likeArticle = articleService.getArticleById(id);
-        System.out.println("文章内容：" + likeArticle);
-        if (likeArticle != null) {
-            System.out.println("当前点赞数" + likeArticle.getLikeCount());
-            likeArticle.setLikeCount(likeArticle.getLikeCount() - 1);
-            articleService.updateArticle(id, likeArticle);
-        }
-        return ResultUtils.success(likeArticle);
+        return null;
+    }
+
+    @GetMapping("/mine")
+    public BaseResponse<Article> getMine(@RequestParam("id") String id) {
+        return null;
     }
 }

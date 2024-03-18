@@ -42,7 +42,7 @@ public class InsertUsers {
                 user.setUsername("假数据");
                 user.setUserAccount("fakedata");
                 user.setAvatarUrl("https://pic2.zhimg.com/v2-2387649d9de0ef6b74aac0f69fbc8b59_r.jpg");
-                user.setGender(String.valueOf(0));
+                user.setGender(0);
                 user.setUserPassword("12345678");
                 user.setPhone("123");
                 user.setEmail("123@qq.com");
