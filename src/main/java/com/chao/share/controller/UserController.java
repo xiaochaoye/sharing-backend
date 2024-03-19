@@ -88,7 +88,7 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public BaseResponse<List<User>> searchUsers(String username, Long id, String gender, HttpServletRequest request) {
+    public BaseResponse<List<User>> searchUsers(String username, Long id, Integer gender, HttpServletRequest request) {
         if (userService.isAdminSearch(request)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -99,7 +99,7 @@ public class UserController {
         if (id != null) {
             queryWrapper.eq("id", id);
         }
-        if (StringUtils.isNotBlank(gender)) {
+        if (gender != null) {
             queryWrapper.eq("gender", gender);
         }
         List<User> userList = userService.list(queryWrapper);

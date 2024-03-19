@@ -97,18 +97,30 @@ public class ArticleController {
         return ResultUtils.success(likeArticle);
     }
 
-    @GetMapping("/favourite")
-    public BaseResponse<Article> getFavourite(@RequestParam("id") String id) {
+    @GetMapping("/search")
+    public BaseResponse<Article> getSearch( String id) {
         return null;
     }
 
-    @GetMapping("/search")
-    public BaseResponse<Article> getSearch(@RequestParam("id") String id) {
+    @PostMapping("/favourite/set")
+    public BaseResponse<Article> setFavourite(@RequestParam("id") String id, HttpServletRequest request) {
+        return null;
+    }
+
+    @GetMapping("/favourite/get")
+    public BaseResponse<List<Article>> getFavourite(@RequestParam("userId") String userId) {
         return null;
     }
 
     @GetMapping("/mine")
-    public BaseResponse<Article> getMine(@RequestParam("id") String id) {
-        return null;
+    public BaseResponse<List<Article>> getMine(HttpServletRequest request) {
+        Object object = request.getSession().getAttribute(USER_LOGIN_STATE);
+        User user = (User) object;
+        if (user == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN, "用户未登录");
+        }
+        Long authorId = user.getId();
+        List<Article> byId = articleService.getArticlesByUser(authorId);
+        return ResultUtils.success(byId);
     }
 }

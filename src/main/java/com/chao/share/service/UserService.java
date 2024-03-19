@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
 * @author wangchao
 * @description 针对表【user(用户)】的数据库操作Service
-* @createDate 2024-02-05 11:04:01
+*
 */
 public interface UserService extends IService<User> {
 
@@ -20,7 +20,6 @@ public interface UserService extends IService<User> {
     int userLogout(HttpServletRequest request);
 
     User getSafetyUser(User user);
-
 
     /**
      * 是否为管理员(查询时用)

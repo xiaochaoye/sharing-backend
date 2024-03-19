@@ -15,4 +15,6 @@ public interface ArticleService  {
     Article updateArticle(String id, Article article);
 
     Article getArticleById(String id);
+
+    List<Article> getArticlesByUser(Long authorId);
 }
