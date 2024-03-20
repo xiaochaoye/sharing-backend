@@ -5,9 +5,10 @@ import com.chao.share.common.ErrorCode;
 import com.chao.share.common.ResultUtils;
 import com.chao.share.exception.BusinessException;
 import com.chao.share.model.domain.Article;
+import com.chao.share.model.domain.Favourite;
 import com.chao.share.model.domain.User;
 import com.chao.share.service.ArticleService;
-import com.chao.share.service.UserService;
+import com.chao.share.service.FavouriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,7 @@ public class ArticleController {
     private ArticleService articleService;
 
     @Resource
-    private UserService userService;
+    private FavouriteService favouriteService;
 
     @GetMapping("/cards")
     @ResponseBody
@@ -103,13 +104,20 @@ public class ArticleController {
     }
 
     @PostMapping("/favourite/set")
-    public BaseResponse<Article> setFavourite(@RequestParam("id") String id, HttpServletRequest request) {
-        return null;
+    public BaseResponse<Integer> setFavourite(@RequestBody Favourite favourite) {
+        int added = favouriteService.addFavourite(favourite.getUserId(), favourite.getContentID());
+        return ResultUtils.success(added);
     }
 
     @GetMapping("/favourite/get")
     public BaseResponse<List<Article>> getFavourite(@RequestParam("userId") String userId) {
         return null;
+    }
+
+    @PostMapping("/favourite/remove")
+    public BaseResponse<String> removeFavourite(@RequestBody Favourite favourite) {
+        String removed = favouriteService.deleteFavourite(favourite.getUserId(), favourite.getContentID());
+        return ResultUtils.success(removed);
     }
 
     @GetMapping("/mine")

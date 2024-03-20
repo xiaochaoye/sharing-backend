@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 
 /**
-* @author wangchao
+* @author 超
 * @description 针对表【user(用户)】的数据库操作Service
 *
 */

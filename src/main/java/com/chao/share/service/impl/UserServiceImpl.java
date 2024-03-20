@@ -6,23 +6,15 @@ import com.chao.share.common.ErrorCode;
 import com.chao.share.common.UserConstant;
 import com.chao.share.exception.BusinessException;
 import com.chao.share.mapper.UserMapper;
-import com.chao.share.model.domain.UploadFile;
 import com.chao.share.model.domain.User;
 import com.chao.share.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.bson.types.Binary;
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,11 +33,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Resource
     private UserMapper userMapper;
 
-    @Resource
-    private GridFsTemplate gridFsTemplate;
-
-    @Resource
-    private MongoTemplate mongoTemplate;
     /**
      * 盐值，混淆密码
      */

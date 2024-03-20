@@ -15,4 +15,7 @@
         id,userId,contentID,
         createTime
     </sql>
+    <delete id="deleteByContentId">
+        delete from favourite where userId =#{userId,jdbcType=BIGINT} and contentID = #{contentId,jdbcType=VARCHAR}
+    </delete>
 </mapper>
