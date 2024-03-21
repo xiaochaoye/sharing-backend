@@ -55,4 +55,7 @@ public class Article {
     @Getter
     private int likeCount;
 
+    @Setter
+    @Getter
+    private int collectCount;
 }

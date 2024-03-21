@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.data.mongodb.core.query.Query;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -70,5 +71,23 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Article> getArticlesByUser(Long authorId) {
         Query query = new Query(Criteria.where("authorId").is(authorId));
         return mongoTemplate.find(query, Article.class);
+    }
+
+    @Override
+    public List<Article> searchArticlesByTitle(String title) {
+        Pattern pattern = Pattern.compile(".*" + title + ".*", Pattern.CASE_INSENSITIVE);
+        Query query = new Query();
+        query.addCriteria(Criteria.where("title").regex(pattern));
+        return mongoTemplate.find(query, Article.class);
+    }
+
+    @Override
+    public List<Article> searchArticlesByContent(String title) {
+//        String regex = "[\\u4e00-\\u9fa5a-zA-Z0-9]";
+        Pattern pattern = Pattern.compile( title, Pattern.CASE_INSENSITIVE);
+        Query query = new Query();
+        query.addCriteria(Criteria.where("content").regex(String.valueOf(pattern),"i"));
+        return mongoTemplate.find(query, Article.class);
+
     }
 }

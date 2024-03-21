@@ -36,6 +36,11 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    /**
+     *  用户注册
+     *  @param userRegisterRequest
+     *  @return
+     */
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
         if (userRegisterRequest == null) {
@@ -51,6 +56,12 @@ public class UserController {
         return ResultUtils.success(result);
     }
 
+    /**
+     *  用户登录
+     *  @param userLoginRequest
+     *  @param request
+     *  @return
+     */
     @PostMapping("/login")
     public BaseResponse<User> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
         if (userLoginRequest == null) {
@@ -65,6 +76,11 @@ public class UserController {
         return ResultUtils.success(user);
     }
 
+    /**
+     *  用户注销
+     *  @param request
+     *  @return
+     */
     @PostMapping("/logout")
     public BaseResponse<Integer> userLogout(HttpServletRequest request) {
         if (request == null) {
@@ -74,6 +90,11 @@ public class UserController {
         return ResultUtils.success(result);
     }
 
+    /**
+     *  获取当前登录用户信息
+     *  @param request
+     *  @return
+     */
     @GetMapping("/current")
     public BaseResponse<User> getCurrentUser(HttpServletRequest request) {
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
@@ -87,6 +108,14 @@ public class UserController {
         return ResultUtils.success(safetyUser);
     }
 
+    /**
+     *  搜索用户信息
+     *  @param username
+     *  @param id
+     *  @param gender
+     *  @param request
+     *  @return
+     */
     @GetMapping("/search")
     public BaseResponse<List<User>> searchUsers(String username, Long id, Integer gender, HttpServletRequest request) {
         if (userService.isAdminSearch(request)) {
@@ -106,6 +135,7 @@ public class UserController {
         List<User> list = userList.stream().map(user -> userService.getSafetyUser(user)).collect(Collectors.toList());
         return ResultUtils.success(list);
     }
+
 
     @PostMapping("/update")
     public BaseResponse<Integer> updateUser(@RequestBody User user, HttpServletRequest request) {

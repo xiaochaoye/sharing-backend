@@ -17,4 +17,8 @@ public interface ArticleService  {
     Article getArticleById(String id);
 
     List<Article> getArticlesByUser(Long authorId);
+
+    List<Article> searchArticlesByTitle(String keyword);
+
+    List<Article> searchArticlesByContent(String title);
 }
